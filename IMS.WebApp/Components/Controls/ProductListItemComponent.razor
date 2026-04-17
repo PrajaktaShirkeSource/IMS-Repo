@@ -1,4 +1,5 @@
-﻿
+﻿@inject IDeleteProductUseCase DeleteProductUseCase
+@inject NavigationManager NavigationManager
 
 @if (Product is not null)
 {
@@ -10,10 +11,23 @@
             @* <button type="button" class=" btn btn-light">Edit</button> *@
             <a href="/editproduct/@Product.ProductId" class="btn btn-primary">Edit</a>
         </td>
+        <td>
+            <EditForm Model="Product" FormName="@($"form-delete-product-{Product.ProductId}")"
+            OnValidSubmit="()=>DeleteProduct(Product.ProductId)">
+            <button type="submit" class="btn btn-light">Delete</button>
+        </EditForm>
+        </td>
     </tr>
 }
 
 @code {
     [Parameter]
     public Product? Product { get; set; }
+
+    private async Task DeleteProduct(int productId)
+    {
+        await DeleteProductUseCase.ExecuteAsync(productId);
+        NavigationManager.Refresh();
+    }
+
 }
