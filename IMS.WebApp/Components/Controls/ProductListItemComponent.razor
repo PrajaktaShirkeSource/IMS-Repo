@@ -12,7 +12,7 @@
             <a href="/editproduct/@Product.ProductId" class="btn btn-primary">Edit</a>
         </td>
         <td>
-            <EditForm Model="Product" FormName="@($"form-delete-product-{Product.ProductId}")"
+            <EditForm Enhance="true" Model="Product" FormName="@($"form-delete-product-{Product.ProductId}")"
             OnValidSubmit="()=>DeleteProduct(Product.ProductId)">
             <button type="submit" class="btn btn-light">Delete</button>
         </EditForm>
@@ -29,5 +29,4 @@
         await DeleteProductUseCase.ExecuteAsync(productId);
         NavigationManager.Refresh();
     }
-
-}
+ }
