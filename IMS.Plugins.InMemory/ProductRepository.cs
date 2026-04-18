@@ -10,13 +10,13 @@ namespace IMS.Plugins.InMemory
         {
             _products = new List<Product>()
             {
-                new Product{ProductId=1, ProductName="Bike Seat", Quantity=15, Price=2},
-                new Product{ProductId=2, ProductName="Bike Body", Quantity=15, Price=15},
-                new Product{ProductId=3, ProductName="Bike Wheels", Quantity=30, Price=5},
-                new Product{ProductId=4, ProductName="Bike Pedals", Quantity=40, Price=3},
+                new Product{ProductId=1, ProductName="Bike", Quantity=15, Price=2},
+                new Product{ProductId=2, ProductName="Car", Quantity=15, Price=15},
+                new Product{ProductId=3, ProductName="Toy Car", Quantity=30, Price=5},
+                new Product{ProductId=4, ProductName="Toy Bike", Quantity=40, Price=3},
                 new Product{ProductId=5, ProductName="Bike Bell", Quantity=20, Price=2},
-                new Product{ProductId=6, ProductName="Bike Stopper", Quantity=15, Price=2},
-                new Product{ProductId=7, ProductName="Bike Chain", Quantity=23, Price=5}
+                new Product{ProductId=6, ProductName="Tricycle", Quantity=15, Price=2},
+                new Product{ProductId=7, ProductName="Toy Tricycle", Quantity=23, Price=5}
             };
         }
 
