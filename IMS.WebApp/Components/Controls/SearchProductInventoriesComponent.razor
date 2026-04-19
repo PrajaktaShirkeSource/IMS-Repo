@@ -1,23 +1,61 @@
-﻿
+﻿@inject IViewInventoriesByNameUseCase ViewInventoriesByNameUseCase
+<div class="input-group">
+    <input class="form-control"
+           placeholder="Type inventory namer here to search"
+           @bind-value="this.searchFilter" @bind-value:event="oninput"></input>
 
-<EditForm Model="searchFilter" FormName="formSearchInv" OnSubmit="Search">
-    <div class="input-group">
-        <InputText class="form-control" placeholder="Type inventory namer here to search" @bind-Value="this.searchFilter"></InputText>
-        <button type="submit" class="btn-success inputt-group-text">Search</button>
+    <button type="submit" class="btn-success inputt-group-text" @onclick="HandleSearch">Search</button>
+</div>
+
+@if (inventories is not null && inventories.Count > 0)
+{
+    <div>
+        <ul style="list-style-type: none">
+            @foreach (var inv in inventories)
+            {
+                @*  Blazor will be able to know whether inv should be added or removed which will increase the performance. *@
+                @* And cursor will be a hand to show that the hovered inventory *@
+                <li @key="inv.InventoryId"
+                    style="cursor:pointer"
+                    @onclick="()=> {HandleSelectInventory(inv);}">
+                    @inv.InventoryName
+                </li>
+            }
+        </ul>
     </div>
-
-</EditForm>
+}
 <br />
 
 @code {
-    [SupplyParameterFromForm]
-    private string searchFilter { get; set; } = string.Empty;
-
     [Parameter]
-    public EventCallback<string> OnSearch { get; set; }
+    public EventCallback<Inventory> OnInventorySelected { get; set; }
 
-    private void Search()
+    // state variable
+    private string _searchFiter;
+    private string searchFilter
     {
-        OnSearch.InvokeAsync(searchFilter);
+        get => _searchFiter;
+        set
+        {
+            _searchFiter = value;
+            HandleSearch();
+        }
+    }
+
+    private List<Inventory> inventories = new List<Inventory>();
+
+    // Event handler
+    private async Task HandleSearch()
+    {
+        await Task.Delay(2000);
+        inventories = (await ViewInventoriesByNameUseCase.ExecuteAsync(this.searchFilter)).ToList();
+
+        StateHasChanged();
+    }
+
+    private async Task HandleSelectInventory(Inventory inventory)
+    {
+        await OnInventorySelected.InvokeAsync(inventory);
+        inventories.Clear(); // To clear the inventories list
     }
 }
