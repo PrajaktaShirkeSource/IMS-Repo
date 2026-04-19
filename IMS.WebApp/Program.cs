@@ -5,10 +5,18 @@ using IMS.UseCases.Inventories.Interfaces;
 using IMS.UseCases.Inventories;
 using IMS.UseCases.Products;
 using IMS.UseCases.Products.Interfaces;
+using IMS.Plugins.EFCoreSqlServer;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddDbContextFactory<IMSContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("InventoryManagement"));
+});
+
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
 // This instance is created ans stored in dependency injection container for the lifetime of an application
