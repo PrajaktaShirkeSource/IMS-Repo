@@ -9,7 +9,7 @@ using IMS.UseCases.Products.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorComponents();
+builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
 // This instance is created ans stored in dependency injection container for the lifetime of an application
 builder.Services.AddSingleton<IInventoryRepository, InventoryRepository>();
@@ -45,6 +45,6 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAntiforgery();
 
-app.MapRazorComponents<App>();
+app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 app.Run();

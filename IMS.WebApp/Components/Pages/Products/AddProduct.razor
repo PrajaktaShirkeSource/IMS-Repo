@@ -1,5 +1,7 @@
 ﻿@page "/addproduct"
 
+@rendermode InteractiveServer
+
 @inject IAddProductUseCase AddProductUseCase
 @inject NavigationManager NavigationManager
 
@@ -9,8 +11,8 @@
 </form>
  *@
 
-@* For Static SSR *@
-<EditForm Model="product" FormName="formProduct" OnValidSubmit="Save">
+@* For Interactive Render mode, we don't need FormName as there is no postback *@
+<EditForm Model="product" OnValidSubmit="Save">
     <DataAnnotationsValidator></DataAnnotationsValidator>
     @* <ValidationSummary></ValidationSummary> *@
 
@@ -31,6 +33,11 @@
         <InputNumber id="price" @bind-Value="product.Price" class="form-control"></InputNumber>
         <ValidationMessage For="() => product.Price"></ValidationMessage>
     </div>
+    
+    <div class="form-group">
+        <label for="price">Inventories</label>
+        <ProductInventoriesComponent Product="this.product"></ProductInventoriesComponent>
+    </div>
     <br />
     <button type="submit" class="btn btn-primary">Save</button>
     &nbsp;
@@ -38,8 +45,11 @@
 </EditForm>
 
 @code {
+    // [SupplyParameterFromForm] - Needed Only For Static SSR
     // Data from within the form is populated using SupplyParameterFromForm attribute
-    [SupplyParameterFromForm]
+    // [SupplyParameterFromForm]
+    
+    
     private Product product { get; set; } = new Product();
 
     private async Task Save()
