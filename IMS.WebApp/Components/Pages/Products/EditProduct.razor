@@ -57,7 +57,7 @@
         if (product is not null)
         {
             await EditProductUseCase.ExecuteAsync(product);
-            NavigationManager.NavigateTo("/inventories");
+            NavigationManager.NavigateTo("/products");
         }
     }
 }
