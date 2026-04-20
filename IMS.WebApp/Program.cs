@@ -7,6 +7,7 @@ using IMS.UseCases.Products;
 using IMS.UseCases.Products.Interfaces;
 using IMS.Plugins.EFCoreSqlServer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,13 +20,21 @@ builder.Services.AddDbContextFactory<IMSContext>(options =>
 
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
-// This instance is created ans stored in dependency injection container for the lifetime of an application
-builder.Services.AddSingleton<IInventoryRepository, InventoryRepository>();
-builder.Services.AddSingleton<IProductRepository, ProductRepository>();
-
-// Transient because - Everytime when program (class or rasor component) needs an object of ViewInventoriesByNameUseCase, new instance is created
-// here the usecase doesn't store data so it is lightweight.
-builder.Services.AddTransient<IViewInventoriesByNameUseCase, ViewInventoriesByNameUseCase>();
+if (builder.Environment.IsEnvironment("Testing"))
+{
+    StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
+    // This instance is created ans stored in dependency injection container for the lifetime of an application
+    builder.Services.AddSingleton<IInventoryRepository, InventoryRepository>();
+    builder.Services.AddSingleton<IProductRepository, ProductRepository>();
+}
+else
+{
+    builder.Services.AddTransient<IInventoryRepository, InventoryEFCoreRepository>();
+    builder.Services.AddTransient<IProductRepository, ProductEFCoreRepository>();
+}
+    // Transient because - Everytime when program (class or rasor component) needs an object of ViewInventoriesByNameUseCase, new instance is created
+    // here the usecase doesn't store data so it is lightweight.
+    builder.Services.AddTransient<IViewInventoriesByNameUseCase, ViewInventoriesByNameUseCase>();
 builder.Services.AddTransient<IViewInventoryByIdUseCase, ViewInventoryByIdUseCase>();
 builder.Services.AddTransient<IAddInventoryUseCase, AddInventoryUseCase>();
 builder.Services.AddTransient<IEditInventoryUseCase, EditInventoryUseCase>();
